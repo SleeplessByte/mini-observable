@@ -2,10 +2,12 @@
 
 A (somewhat) compatible implementation of Observable in < 350bytes, plus some utility functions.
 
+[![Build Status](https://travis-ci.com/SleeplessByte/mini-observable.svg?branch=master)](https://travis-ci.com/SleeplessByte/mini-observable)
+
 Forked from [keithamus/mini-observable](https://github.com/keithamus/mini-observable). I needed a typescript library
 that worked with strict mode on version 3.3.3333+. Instead of forcing the original author to change their library to be
 strictly typed, I forked and pushed it (so it could be used in my ecosystems). Because it needs to adhere to strict mode
-the implementation is just over 300 bytes. You can see the [initial change here](https://github.com/keithamus/mini-observable/compare/e460b4a401373a1b59792e27a84829773d0f0e8f...SleeplessByte:ad562ea).
+the implementation is just over 400 bytes -- 315 without comments. You can see the [initial change here](https://github.com/keithamus/mini-observable/compare/e460b4a401373a1b59792e27a84829773d0f0e8f...SleeplessByte:ad562ea).
 
 My goal is to make this more TC39 compatible as I need certain functionality in my projects.
 
