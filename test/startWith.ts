@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import of from '../of'
-import startWith from '../startwith'
+import startWith from '../startWith'
 
 describe('startWith', () => {
   it('pushes value into start of stream', done => {

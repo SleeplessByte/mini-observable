@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import of from '../of'
-import skipRepeats from '../skiprepeats'
+import skipRepeats from '../skipRepeats'
 
 describe('skipRepeats', () => {
   it('only sends through non-repeating events', done => {

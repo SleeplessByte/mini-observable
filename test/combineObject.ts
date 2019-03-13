@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import combineObject from '../combineobject'
+import combineObject from '../combineObject'
 import of from '../of'
 
 describe('combineObject', () => {

@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import Observable from '../observable'
-import switchLatest from '../switchlatest'
+import switchLatest from '../switchLatest'
 
 describe('switchLatest', () => {
   it('cancels any previous in-flight inner observables', done => {

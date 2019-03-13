@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import fromEvent from '../fromevent'
+import fromEvent from '../fromEvent'
 
 describe('fromEvent', () => {
   it('attaches event listener', done => {

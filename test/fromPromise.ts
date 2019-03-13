@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import fromPromise from '../frompromise'
+import fromPromise from '../fromPromise'
 
 describe('fromPromise', () => {
   it('fromPromise success', done => {

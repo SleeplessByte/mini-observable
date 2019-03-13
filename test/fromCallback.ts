@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import fromCallback from '../fromcallback'
+import fromCallback from '../fromCallback'
 
 describe('fromCallback', () => {
   it('returns a function', () => {

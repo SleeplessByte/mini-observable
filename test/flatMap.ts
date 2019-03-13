@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import flatMap from '../flatmap'
+import flatMap from '../flatMap'
 import Observable from '../observable'
 
 describe('flatMap', () => {
