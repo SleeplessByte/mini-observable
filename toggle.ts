@@ -1,4 +1,4 @@
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
 
 /**
@@ -22,10 +22,15 @@ import Observable from './observable'
  * @param {ObservableT<boolean>} toggler observable that controls the emits of the returned observable
  * @returns {ObservableT<T>} the observable that only emits when toggler's last emit is `true`
  */
-export default function toggle<T>(source: ObservableT<T>, toggler: ObservableT<boolean>): ObservableT<T> {
-  return new Observable(({complete, error, next}) => {
+export default function toggle<T>(
+  source: ObservableT<T>,
+  toggler: ObservableT<boolean>
+): ObservableT<T> {
+  return new Observable(({ complete, error, next }) => {
     let doNext = false
-    const togglerSubscription = toggler.subscribe({ next: bool => doNext = bool })
+    const togglerSubscription = toggler.subscribe({
+      next: bool => (doNext = bool)
+    })
     const sourceSubscription = source.subscribe({
       complete,
       error,
@@ -37,4 +42,3 @@ export default function toggle<T>(source: ObservableT<T>, toggler: ObservableT<b
     }
   })
 }
-

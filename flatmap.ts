@@ -1,4 +1,4 @@
-import {Observable as ObservableT, Subscription} from './index'
+import { Observable as ObservableT, Subscription } from './index'
 import Observable from './observable'
 
 // transform t: x => Observable.of(x+1, x+2))
@@ -23,21 +23,28 @@ import Observable from './observable'
  * @param {(item: T) => ObservableT<U>} transform function that generates observables based on emits from source
  * @returns {ObservableT<U>} the observable that emits everything from the transform return value observables
  */
-export default function flatMap<T, U>(source: ObservableT<T>, transform: (item: T) => ObservableT<U>): ObservableT<U> {
+export default function flatMap<T, U>(
+  source: ObservableT<T>,
+  transform: (item: T) => ObservableT<U>
+): ObservableT<U> {
   let observables = 0
   const subscriptions: Subscription[] = []
-  return new Observable(({error, next, complete}) => {
-    subscriptions.push(source.subscribe({
-      error,
-      next: value => {
-        observables += 1
-        subscriptions.push(transform(value).subscribe({
-          error, next,
-          complete: () => (observables -= 1) === 0 && complete()
-        }))
-      },
-    }))
-    return () => subscriptions.forEach(({unsubscribe}) => unsubscribe())
+  return new Observable(({ error, next, complete }) => {
+    subscriptions.push(
+      source.subscribe({
+        error,
+        next: value => {
+          observables += 1
+          subscriptions.push(
+            transform(value).subscribe({
+              error,
+              next,
+              complete: () => (observables -= 1) === 0 && complete()
+            })
+          )
+        }
+      })
+    )
+    return () => subscriptions.forEach(({ unsubscribe }) => unsubscribe())
   })
 }
-

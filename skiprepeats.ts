@@ -1,4 +1,4 @@
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
 
 /**
@@ -19,13 +19,12 @@ import Observable from './observable'
  * @returns {ObservableT<T>} the new observable that skips repeated values
  */
 export default function skipRepeats<T>(source: ObservableT<T>): ObservableT<T> {
-  return new Observable(({complete, error, next}) => {
+  return new Observable(({ complete, error, next }) => {
     let lastValue = {}
     return source.subscribe({
       complete,
       error,
-      next: value => lastValue !== value && next(lastValue = value)
+      next: value => lastValue !== value && next((lastValue = value))
     })
   })
 }
-

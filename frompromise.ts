@@ -12,8 +12,7 @@ import Observable from './observable'
  * @returns {ObservableT<T>} the observable that emits when the promise resolves
  */
 export default function fromPromise<T>(promise: Promise<T>): ObservableT<T> {
-  return new Observable(({next, error, complete}) => {
+  return new Observable(({ next, error, complete }) => {
     promise.then(next, error).then(complete)
   })
 }
-

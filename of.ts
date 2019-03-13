@@ -1,4 +1,4 @@
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
 
 /**
@@ -8,8 +8,10 @@ import Observable from './observable'
  * @returns {ObservableT<T>} the observable that emmits the items
  */
 export default function of<T>(...items: T[]): ObservableT<T> {
-  return new Observable(({next, complete}) => {
-    for (const item of items) { next(item) }
+  return new Observable(({ next, complete }) => {
+    for (const item of items) {
+      next(item)
+    }
     complete()
   })
 }

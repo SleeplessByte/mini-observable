@@ -1,4 +1,4 @@
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
 
 /**
@@ -18,7 +18,10 @@ import Observable from './observable'
  * @param {number} duration number of milliseconds it should be debounced
  * @returns {ObservableT<T>} observable that debounces source emits by duration ms
  */
-export default function debounce<T>(source: ObservableT<T>, duration: number): ObservableT<T> {
+export default function debounce<T>(
+  source: ObservableT<T>,
+  duration: number
+): ObservableT<T> {
   return new Observable(({ complete, error, next }) => {
     let timer: number
     source.subscribe({
@@ -26,8 +29,8 @@ export default function debounce<T>(source: ObservableT<T>, duration: number): O
       complete: () => setTimeout(complete, duration),
       next: value => {
         clearTimeout(timer)
-        timer = setTimeout(next, duration, value) as unknown as number
-      },
+        timer = (setTimeout(next, duration, value) as unknown) as number
+      }
     })
   })
 }

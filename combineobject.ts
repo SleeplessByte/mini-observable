@@ -1,8 +1,14 @@
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
 
-interface Sources<T> { [name: string]: ObservableT<T> }
-type InferT<S extends Sources<W>, W> = S extends { [name: string]: ObservableT<infer T> } ? T : never
+interface Sources<T> {
+  [name: string]: ObservableT<T>
+}
+type InferT<S extends Sources<W>, W> = S extends {
+  [name: string]: ObservableT<infer T>
+}
+  ? T
+  : never
 
 /**
  * Combine an object of observables into a single observable which outputs an object.
@@ -22,8 +28,10 @@ type InferT<S extends Sources<W>, W> = S extends { [name: string]: ObservableT<i
  * @param {{ [name: string]: ObservableT<T> }} sources
  * @returns {ObservableT<Record<keyof S, T>>} the combined observable
  */
-export default function combineObject<S extends Sources<T>, T>(sources: S): ObservableT<Record<keyof typeof sources, InferT<S, T>>> {
-  return new Observable(({error, next, complete}) => {
+export default function combineObject<S extends Sources<T>, T>(
+  sources: S
+): ObservableT<Record<keyof typeof sources, InferT<S, T>>> {
+  return new Observable(({ error, next, complete }) => {
     const total = Object.keys(sources).length
     const started: Partial<Record<keyof S, true>> = {}
     let completed = 0
@@ -39,7 +47,8 @@ export default function combineObject<S extends Sources<T>, T>(sources: S): Obse
           next(value) {
             started[name] = true
             values[name] = value
-            Object.keys(started).length === total && next(values as Record<keyof S, InferT<S, T>>)
+            Object.keys(started).length === total &&
+              next(values as Record<keyof S, InferT<S, T>>)
           }
         })
       }

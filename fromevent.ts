@@ -1,10 +1,18 @@
 /* globals AddEventListenerOptions, Event, CustomEvent */
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
 
 interface HTMLElementLike {
-  addEventListener(name: string, next: (...args: any[]) => any, options?: boolean|AddEventListenerOptions): void,
-  removeEventListener(name: string, next: (...args: any[]) => any, options?: boolean|AddEventListenerOptions): void,
+  addEventListener(
+    name: string,
+    next: (...args: any[]) => any,
+    options?: boolean | AddEventListenerOptions
+  ): void
+  removeEventListener(
+    name: string,
+    next: (...args: any[]) => any,
+    options?: boolean | AddEventListenerOptions
+  ): void
 }
 
 /**
@@ -20,8 +28,12 @@ interface HTMLElementLike {
  *
  * @returns {ObservableT<Event|CustomEvent>} the observable
  */
-export default function fromEvent(element: HTMLElementLike, name: string, options?: boolean|AddEventListenerOptions): ObservableT<Event|CustomEvent> {
-  return new Observable(({next}) => {
+export default function fromEvent(
+  element: HTMLElementLike,
+  name: string,
+  options?: boolean | AddEventListenerOptions
+): ObservableT<Event | CustomEvent> {
+  return new Observable(({ next }) => {
     element.addEventListener(name, next, options)
     return () => element.removeEventListener(name, next, options)
   })

@@ -1,21 +1,23 @@
-import {expect} from 'chai'
-import {describe, it} from 'mocha'
+import { expect } from 'chai'
+import { describe, it } from 'mocha'
 import of from '../of'
 import skipRepeats from '../skiprepeats'
 
 describe('skipRepeats', () => {
-
   it('only sends through non-repeating events', done => {
     const numbers: number[] = []
     skipRepeats(of(1, 1, 2, 2, 3, 3, 1, 1)).subscribe({
       error: done,
-      next(n) { numbers.push(n) },
-      complete() {
-        expect(numbers).to.deep.equal([1, 2, 3, 1], 'skipRepeats did not work correctly')
-        done()
+      next(n) {
+        numbers.push(n)
       },
+      complete() {
+        expect(numbers).to.deep.equal(
+          [1, 2, 3, 1],
+          'skipRepeats did not work correctly'
+        )
+        done()
+      }
     })
   })
-
 })
-

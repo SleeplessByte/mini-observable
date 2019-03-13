@@ -1,7 +1,5 @@
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
-
-
 
 /**
  * Creates an observable that combines two observables via a transform function
@@ -29,12 +27,16 @@ import Observable from './observable'
  *
  * @param {ObservableT<T>} sourceA the first source
  * @param {ObservableT<U>} sourceB the second source
- * @param {(a: T, b: U) => V} transform function to map from the two sources to the new value
+ * @param {((a: T, b: U) => V)} transform function to map from the two sources to the new value
  *
  * @returns {ObservableT<V>} the observable that has the combined values
  */
-export default function combine<T,U,V>(sourceA: ObservableT<T>, sourceB: ObservableT<U>, transform: (a: T, b: U) => V): ObservableT<V> {
-  return new Observable(({error, next, complete}) => {
+export default function combine<T, U, V>(
+  sourceA: ObservableT<T>,
+  sourceB: ObservableT<U>,
+  transform: (a: T, b: U) => V
+): ObservableT<V> {
+  return new Observable(({ error, next, complete }) => {
     let sourceAComplete = false
     let sourceBComplete = false
     let sourceAStarted: boolean

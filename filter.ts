@@ -1,4 +1,4 @@
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
 
 /**
@@ -18,12 +18,15 @@ import Observable from './observable'
  * @param {(item: T) => boolean} predicate the filter predicate
  * @returns {ObservableT<T>} filtered source observable by predicate
  */
-export default function filter<T>(source: ObservableT<T>, predicate: (item: T) => boolean): ObservableT<T> {
-  return new Observable(({complete, error, next}) =>
+export default function filter<T>(
+  source: ObservableT<T>,
+  predicate: (item: T) => boolean
+): ObservableT<T> {
+  return new Observable(({ complete, error, next }) =>
     source.subscribe({
-      complete, error,
-      next: (value) => predicate(value) && next(value),
+      complete,
+      error,
+      next: value => predicate(value) && next(value)
     })
   )
 }
-

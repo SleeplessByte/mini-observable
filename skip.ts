@@ -1,4 +1,4 @@
-import {Observable as ObservableT} from './index'
+import { Observable as ObservableT } from './index'
 import Observable from './observable'
 
 /**
@@ -18,16 +18,20 @@ import Observable from './observable'
  *
  * @returns {ObservableT<T>} the new observable that skips the first count values
  */
-export default function skip<T>(source: ObservableT<T>, count: number): ObservableT<T> {
-  return new Observable(({complete, error, next}) => {
+export default function skip<T>(
+  source: ObservableT<T>,
+  count: number
+): ObservableT<T> {
+  return new Observable(({ complete, error, next }) => {
     return source.subscribe({
       complete,
       error,
-      next: (value) => {
-        if (count === 0) { return next(value) }
+      next: value => {
+        if (count === 0) {
+          return next(value)
+        }
         count -= 1
       }
     })
   })
 }
-

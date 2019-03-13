@@ -1,4 +1,4 @@
-import {Observable as ObservableT, Subscription} from './index'
+import { Observable as ObservableT, Subscription } from './index'
 import Observable from './observable'
 
 /**
@@ -26,11 +26,14 @@ import Observable from './observable'
  *
  * @returns {ObservableT<U>} new observable that emits items coming from the latest transformed observable
  */
-export default function switchLatest<T, U>(source: ObservableT<T>, transform: (item: T) => ObservableT<U>): ObservableT<U> {
+export default function switchLatest<T, U>(
+  source: ObservableT<T>,
+  transform: (item: T) => ObservableT<U>
+): ObservableT<U> {
   let remaining = 0
-  return new Observable(({error, next, complete}) => {
+  return new Observable(({ error, next, complete }) => {
     let oldSubscription: Subscription | null = null
-    const {unsubscribe} = source.subscribe({
+    const { unsubscribe } = source.subscribe({
       error,
       next: value => {
         remaining += 1
@@ -39,7 +42,8 @@ export default function switchLatest<T, U>(source: ObservableT<T>, transform: (i
           oldSubscription.unsubscribe()
         }
         oldSubscription = transform(value).subscribe({
-          error, next,
+          error,
+          next,
           complete: () => {
             remaining -= 1
             if (remaining === 0) {
@@ -48,8 +52,7 @@ export default function switchLatest<T, U>(source: ObservableT<T>, transform: (i
             }
           }
         })
-      },
+      }
     })
   })
 }
-
