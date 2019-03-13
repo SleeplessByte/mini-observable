@@ -12,7 +12,7 @@ describe('README', () => {
       )
       .map(file => file.substr(0, file.length - 3))
       .filter(file => file !== 'observable')
-    const readme = readFileSync(resolve(__dirname, '../readme.md'), 'utf8')
+    const readme = readFileSync(resolve(__dirname, '../README.md'), 'utf8')
     for (const util of utils) {
       expect(readme).to.match(
         new RegExp(`^### ${util} \\[Ⓢ\\]\\(\\./${util}\\.ts\\)$`, 'mi'),
