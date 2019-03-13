@@ -1,7 +1,7 @@
-import Observable from '../observable'
-import debounce from '../debounce'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import debounce from '../debounce'
+import Observable from '../observable'
 
 describe('debounce', () => {
 
@@ -22,7 +22,7 @@ describe('debounce', () => {
       }, 50)
     }), 50).subscribe({
       error: done,
-      next(number) { numbers.push(number) },
+      next(n) { numbers.push(n) },
       complete() {
         expect(numbers).to.deep.equal([1, 4, 7], 'debounce did not work correctly')
         done()

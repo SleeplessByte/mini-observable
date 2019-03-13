@@ -1,6 +1,6 @@
-import fromPromise from '../frompromise'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import fromPromise from '../frompromise'
 
 describe('fromPromise', () => {
 
@@ -8,7 +8,7 @@ describe('fromPromise', () => {
     const numbers: number[] = []
     fromPromise(Promise.resolve(1)).subscribe({
       error: done,
-      next(number) { numbers.push(number) },
+      next(n) { numbers.push(n) },
       complete() {
         expect(numbers).to.deep.equal([1], 'fromPromise did not work properly')
         done()

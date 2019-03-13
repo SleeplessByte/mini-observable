@@ -1,6 +1,6 @@
-import of from '../of'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import of from '../of'
 
 describe('of', () => {
 

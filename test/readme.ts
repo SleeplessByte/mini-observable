@@ -1,7 +1,7 @@
-import {readdirSync, readFileSync} from 'fs'
-import {resolve} from 'path'
 import {expect} from 'chai'
+import {readdirSync, readFileSync} from 'fs'
 import {describe, it} from 'mocha'
+import {resolve} from 'path'
 
 describe('README', () => {
 

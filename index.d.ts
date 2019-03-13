@@ -6,7 +6,7 @@ export interface Subscription {
 export type ObserverStart = (subscription: Subscription) => void
 export type ObserverNext<T> = (() => void) | ((value: T) => void)
 export type ObserverError = (error: Error) => void
-export type ObserverComplete = (value?) => void;
+export type ObserverComplete = (value?: any) => void;
 
 export interface SubscriptionObserver<T> {
   closed: boolean;
@@ -28,5 +28,5 @@ export type SubscriberFunction<T> = (observer: SubscriptionObserver<T>) => Subsc
 
 export class Observable<T> {
   public constructor(callback: SubscriberFunction<T>);
-  public subscribe(observer: SloppyObserver<T>);
+  public subscribe(observer: SloppyObserver<T>): Subscription;
 }

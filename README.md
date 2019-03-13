@@ -1,10 +1,24 @@
-# mini-observable
-> A (somewhat) compatible implementation of Observable in <300bytes, plus some utility functions
+# unobservable
 
-### Usage
+A (somewhat) compatible implementation of Observable in < 350bytes, plus some utility functions.
+
+Forked from [keithamus/mini-observable](https://github.com/keithamus/mini-observable). I needed a typescript library
+that worked with strict mode on version 3.3.3333+. Instead of forcing the original author to change their library to be
+strictly typed, I forked and pushed it (so it could be used in my ecosystems). Because it needs to adhere to strict mode
+the implementation is just over 300 bytes.
+
+My goal is to make this more TC39 compatible as I need certain functionality in my projects.
+
+## Installation
+
+```
+yarn add unobservable
+```
+
+## Usage
 
 ```js
-import {Observable, fromEvent, map, toggle, merge} from 'mini-observable'
+import { Observable, fromEvent, map, toggle, merge } from 'unobservable'
 
 mouseUps = fromEvent(document, 'mouseup')
 mouseDowns = fromEvent(document, 'mousedown')

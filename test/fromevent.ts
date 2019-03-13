@@ -1,6 +1,6 @@
-import fromEvent from '../fromevent'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import fromEvent from '../fromevent'
 
 describe('fromEvent', () => {
 
@@ -8,7 +8,7 @@ describe('fromEvent', () => {
     const optionsStub = {}
     const fakeDomNode = {
       removeEventListener() { done(new Error('removeEventListener was called but shoult not have been')) },
-      addEventListener(name: string, fn: Function, options: object) {
+      addEventListener(name: string, fn: () => void, options: object) {
         expect(name).to.equal('click', 'fromEvent addedEventListener with wrong name')
         expect(fn).to.be.a('function', 'fromEvent addedEventListener passed incorrect callback type')
         expect(options).to.equal(optionsStub, 'fromEvent addedEventListener with wrong options')
@@ -19,13 +19,13 @@ describe('fromEvent', () => {
   })
 
   it('removes event listener on unsubscribe', done => {
-    let nextFn: Function | null = null
+    let nextFn: (() => void) | null = null
     const optionsStub = {}
     const fakeDomNode = {
-      addEventListener(name: string, fn: Function) {
+      addEventListener(name: string, fn: () => void) {
         nextFn = fn
       },
-      removeEventListener(name: string, fn: Function, options: object) {
+      removeEventListener(name: string, fn: () => void, options: object) {
         expect(name).to.equal('click', 'fromEvent removedEventListener with wrong name')
         expect(fn).to.equal(nextFn, 'fromEvent removedEventListener passed wrong function')
         expect(options).to.equal(optionsStub, 'fromEvent removedEventListener with wrong options')

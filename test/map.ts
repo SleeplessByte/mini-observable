@@ -1,7 +1,7 @@
-import of from '../of'
-import map from '../map'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import map from '../map'
+import of from '../of'
 
 describe('map', () => {
 

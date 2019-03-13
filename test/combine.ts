@@ -1,7 +1,7 @@
-import Observable from '../observable'
-import combine from '../combine'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import combine from '../combine'
+import Observable from '../observable'
 
 describe('combine', () => {
 

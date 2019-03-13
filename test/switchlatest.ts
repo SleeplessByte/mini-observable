@@ -1,7 +1,7 @@
-import Observable from '../observable'
-import switchLatest from '../switchlatest'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import Observable from '../observable'
+import switchLatest from '../switchlatest'
 
 describe('switchLatest', () => {
 
@@ -24,7 +24,7 @@ describe('switchLatest', () => {
       })
     ).subscribe({
       error: done,
-      next(number) { numbers.push(number) },
+      next(n) { numbers.push(n) },
       complete() {
         expect(numbers).to.deep.equal([1, 2, 3, 2, 4, 6, 8, 10, 12, 14], 'switchLatest did not work correctly')
         done()
@@ -44,7 +44,7 @@ describe('switchLatest', () => {
       })
     ).subscribe({
       error: done,
-      next(number) { numbers.push(number) },
+      next(n) { numbers.push(n) },
       complete() {
         expect(numbers).to.deep.equal([40], 'switchLatest did not work correctly')
         done()

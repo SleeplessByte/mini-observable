@@ -1,5 +1,5 @@
-import Observable from '../observable'
 import { Subscription } from '../index'
+import Observable from '../observable'
 
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
@@ -7,7 +7,7 @@ import {describe, it} from 'mocha'
 describe('Observable', () => {
 
   it('can create new observable', () => {
-    const observable = new Observable(() => {})
+    const observable = new Observable(() => { /* noop */ })
     expect(observable).to.be.instanceOf(Observable)
   })
 
@@ -82,7 +82,7 @@ describe('Observable', () => {
       next(6)
     }).subscribe({
       error: done,
-      next(number) { numbers.push(number) },
+      next(n) { numbers.push(n) },
       complete() {
         expect(numbers).to.deep.equal([1, 2, 3, 4, 5], 'did not unsubscribe after complete successfully')
         done()
@@ -106,9 +106,9 @@ describe('Observable', () => {
       })
     }).subscribe({
       error: done,
-      next(number) {
-        numbers.push(number)
-        if (number === 5) {
+      next(n) {
+        numbers.push(n)
+        if (n === 5) {
           unsubscribe()
           setTimeout(() => {
             expect(numbers).to.deep.equal([1, 2, 3, 4, 5], 'did not unsubscribe successfully')
@@ -135,9 +135,9 @@ describe('Observable', () => {
       })
     }).subscribe({
       error: done,
-      next(number) {
-        numbers.push(number)
-        if (number === 5) {
+      next(n) {
+        numbers.push(n)
+        if (n === 5) {
           expect(subscription.closed).to.equal(false, 'subscription falsely marked as open')
           subscription.unsubscribe()
           expect(subscription.closed).to.equal(true, 'subscription not marked as closed')
@@ -158,7 +158,7 @@ describe('Observable', () => {
         next(1)
       })
     }).subscribe({
-      start(subscription) { startCalls.push(subscription) },
+      start(s) { startCalls.push(s) },
       error: done,
       next() {
         expect(startCalls.length).to.equal(1, 'start was called more than once')
@@ -174,9 +174,9 @@ describe('Observable', () => {
       next(1)
       next(2)
     }).subscribe({
-      start(subscription) { subscription.unsubscribe() },
-      next(number) {
-        numbers.push(number)
+      start(s) { s.unsubscribe() },
+      next(n) {
+        numbers.push(n)
       }
     })
     expect(numbers).to.deep.equal([], 'no next events should have been fired')

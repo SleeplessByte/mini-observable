@@ -1,7 +1,7 @@
-import of from '../of'
-import combineObject from '../combineobject'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import combineObject from '../combineobject'
+import of from '../of'
 
 describe('combineObject', () => {
 
@@ -13,8 +13,8 @@ describe('combineObject', () => {
       d: of(4),
     }
     combineObject(observables).subscribe({
-      error: done,
       complete: done,
+      error: done,
       next(value) {
         expect(value).to.deep.equal({a: 1, b: 2, c: 3, d: 4}, 'combineObject did not work correctly')
       }

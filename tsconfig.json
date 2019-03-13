@@ -4,7 +4,9 @@
     "module": "commonjs",
     "lib": [ "es2018", "dom" ],
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "strict": false,
+    "allowJs": true
   },
   "include": [ "*.ts" ]
 }

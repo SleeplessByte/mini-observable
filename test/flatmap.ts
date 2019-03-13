@@ -1,7 +1,7 @@
-import Observable from '../observable'
-import flatMap from '../flatmap'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import flatMap from '../flatmap'
+import Observable from '../observable'
 
 describe('flatMap', () => {
 
@@ -15,7 +15,7 @@ describe('flatMap', () => {
       Promise.resolve(value * 2).then(next).then(complete)
     })).subscribe({
       error: done,
-      next(number) { numbers.push(number) },
+      next(n) { numbers.push(n) },
       complete() {
         expect(numbers).to.deep.equal([20, 40], 'flatMap did not work correctly')
         done()

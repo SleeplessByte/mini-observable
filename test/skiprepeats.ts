@@ -1,7 +1,7 @@
-import of from '../of'
-import skipRepeats from '../skiprepeats'
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
+import of from '../of'
+import skipRepeats from '../skiprepeats'
 
 describe('skipRepeats', () => {
 
@@ -9,7 +9,7 @@ describe('skipRepeats', () => {
     const numbers: number[] = []
     skipRepeats(of(1, 1, 2, 2, 3, 3, 1, 1)).subscribe({
       error: done,
-      next(number) { numbers.push(number) },
+      next(n) { numbers.push(n) },
       complete() {
         expect(numbers).to.deep.equal([1, 2, 3, 1], 'skipRepeats did not work correctly')
         done()
