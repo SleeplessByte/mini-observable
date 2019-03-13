@@ -1,28 +1,36 @@
+import { Subscription } from '../index'
 import Observable from '../observable'
-import {expect} from 'chai'
-import {describe, it} from 'mocha'
+
+import { expect } from 'chai'
+import { describe, it } from 'mocha'
 
 describe('Observable', () => {
-
   it('can create new observable', () => {
-    const observable = new Observable(() => {})
+    const observable = new Observable(() => {
+      /* noop */
+    })
     expect(observable).to.be.instanceOf(Observable)
   })
 
   it('can receive events from observable', done => {
-    const letters = []
-    new Observable(({next, complete}) => {
+    const letters: string[] = []
+    new Observable<string>(({ next, complete }) => {
       next('a')
       next('b')
       next('c')
       complete()
     }).subscribe({
       error: done,
-      next(letter) { letters.push(letter) },
-      complete() {
-        expect(letters).to.deep.equal(['a', 'b', 'c'], 'next() did not work correctly')
-        done()
+      next(letter) {
+        letters.push(letter)
       },
+      complete() {
+        expect(letters).to.deep.equal(
+          ['a', 'b', 'c'],
+          'next() did not work correctly'
+        )
+        done()
+      }
     })
   })
 
@@ -40,21 +48,25 @@ describe('Observable', () => {
 
   it('errors', done => {
     const errorValue = new Error('oops')
-    new Observable(({error}) => {
+    new Observable(({ error }) => {
       error(errorValue)
     }).subscribe({
       error(error) {
         expect(error).to.equal(errorValue, 'error did not come back correctly')
         done()
       },
-      next() { throw new Error('called next for some reason') },
-      complete() { throw new Error('called complete for some reason') },
+      next() {
+        throw new Error('called next for some reason')
+      },
+      complete() {
+        throw new Error('called complete for some reason')
+      }
     })
   })
 
   it('errors stop subscription', done => {
     const errorValue = new Error('oops')
-    new Observable(({error, next, complete}) => {
+    new Observable(({ error, next, complete }) => {
       error(errorValue)
       next(1)
       complete()
@@ -63,14 +75,18 @@ describe('Observable', () => {
         expect(error).to.equal(errorValue, 'error did not come back correctly')
         done()
       },
-      next() { throw new Error('called next for some reason') },
-      complete() { throw new Error('called complete for some reason') },
+      next() {
+        throw new Error('called next for some reason')
+      },
+      complete() {
+        throw new Error('called complete for some reason')
+      }
     })
   })
 
   it('nothing is fired after complete', done => {
-    const numbers = []
-    new Observable(({next, complete}) => {
+    const numbers: number[] = []
+    new Observable<number>(({ next, complete }) => {
       next(1)
       next(2)
       next(3)
@@ -80,17 +96,22 @@ describe('Observable', () => {
       next(6)
     }).subscribe({
       error: done,
-      next(number) { numbers.push(number) },
-      complete() {
-        expect(numbers).to.deep.equal([1, 2, 3, 4, 5], 'did not unsubscribe after complete successfully')
-        done()
+      next(n) {
+        numbers.push(n)
       },
+      complete() {
+        expect(numbers).to.deep.equal(
+          [1, 2, 3, 4, 5],
+          'did not unsubscribe after complete successfully'
+        )
+        done()
+      }
     })
   })
 
   it('can unsubscribe to stop receiving events', done => {
-    const numbers = []
-    const {unsubscribe} = new Observable(({next}) => {
+    const numbers: number[] = []
+    const { unsubscribe } = new Observable<number>(({ next }) => {
       setTimeout(() => {
         next(1)
         next(2)
@@ -104,22 +125,25 @@ describe('Observable', () => {
       })
     }).subscribe({
       error: done,
-      next(number) {
-        numbers.push(number)
-        if (number === 5) {
+      next(n) {
+        numbers.push(n)
+        if (n === 5) {
           unsubscribe()
           setTimeout(() => {
-            expect(numbers).to.deep.equal([1, 2, 3, 4, 5], 'did not unsubscribe successfully')
+            expect(numbers).to.deep.equal(
+              [1, 2, 3, 4, 5],
+              'did not unsubscribe successfully'
+            )
             done()
           }, 1)
         }
-      },
+      }
     })
   })
 
   it('can observe if the subscription is closed from the return constructor', done => {
-    const numbers = []
-    const subscription = new Observable(({next}) => {
+    const numbers: number[] = []
+    const subscription = new Observable<number>(({ next }) => {
       setTimeout(() => {
         next(1)
         next(2)
@@ -133,52 +157,73 @@ describe('Observable', () => {
       })
     }).subscribe({
       error: done,
-      next(number) {
-        numbers.push(number)
-        if (number === 5) {
-          expect(subscription.closed).to.equal(false, 'subscription falsely marked as open')
+      next(n) {
+        numbers.push(n)
+        if (n === 5) {
+          expect(subscription.closed).to.equal(
+            false,
+            'subscription falsely marked as open'
+          )
           subscription.unsubscribe()
-          expect(subscription.closed).to.equal(true, 'subscription not marked as closed')
+          expect(subscription.closed).to.equal(
+            true,
+            'subscription not marked as closed'
+          )
           setTimeout(() => {
-            expect(numbers).to.deep.equal([1, 2, 3, 4, 5], 'did not unsubscribe successfully')
-            expect(subscription.closed).to.equal(true, 'subscription not marked as closed')
+            expect(numbers).to.deep.equal(
+              [1, 2, 3, 4, 5],
+              'did not unsubscribe successfully'
+            )
+            expect(subscription.closed).to.equal(
+              true,
+              'subscription not marked as closed'
+            )
             done()
           }, 1)
         }
-      },
+      }
     })
   })
 
   it('can observe the start of a subscription', done => {
-    const startCalls = []
-    const subscription = new Observable(({next}) => {
+    const startCalls: Subscription[] = []
+    const subscription = new Observable<number>(({ next }) => {
       setTimeout(() => {
         next(1)
       })
     }).subscribe({
-      start(subscription) { startCalls.push(subscription) },
+      start(s) {
+        startCalls.push(s)
+      },
       error: done,
       next() {
         expect(startCalls.length).to.equal(1, 'start was called more than once')
-        expect(startCalls[0]).to.equal(subscription, 'start was not given subscription')
+        expect(startCalls[0]).to.equal(
+          subscription,
+          'start was not given subscription'
+        )
         done()
-      },
+      }
     })
   })
 
   it('can close the subscription from start', () => {
-    const numbers = []
-    const subscription = new Observable(({next}) => {
+    const numbers: number[] = []
+    const subscription = new Observable<number>(({ next }) => {
       next(1)
       next(2)
     }).subscribe({
-      start(subscription) { subscription.unsubscribe() },
-      next(number) {
-        numbers.push(number)
+      start(s) {
+        s.unsubscribe()
+      },
+      next(n) {
+        numbers.push(n)
       }
     })
     expect(numbers).to.deep.equal([], 'no next events should have been fired')
-    expect(subscription.closed).to.equal(true, 'subscription is not marked as closed')
+    expect(subscription.closed).to.equal(
+      true,
+      'subscription is not marked as closed'
+    )
   })
-
 })

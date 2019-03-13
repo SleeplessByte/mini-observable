@@ -1,0 +1,10 @@
+sudo: false
+matrix:
+  include:
+    - language: node_js
+      cache: yarn
+      node_js: node
+
+    - language: node_js
+      cache: yarn
+      node_js: lts/*

@@ -1,20 +1,20 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import of from '../of'
-import skip from '../skip'
+import startWith from '../startWith'
 
-describe('skip', () => {
-  it('skips the first N events', done => {
+describe('startWith', () => {
+  it('pushes value into start of stream', done => {
     const numbers: number[] = []
-    skip(of(1, 2, 3, 4, 5, 6, 7), 3).subscribe({
+    startWith(of(2, 3, 4), 1).subscribe({
       error: done,
       next(n) {
         numbers.push(n)
       },
       complete() {
         expect(numbers).to.deep.equal(
-          [4, 5, 6, 7],
-          'skip did not work correctly'
+          [1, 2, 3, 4],
+          'startWith did not work correctly'
         )
         done()
       }
