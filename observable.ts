@@ -89,8 +89,8 @@ export default class Observable<T> {
       wrapTry(() => {
         const observer: SubscriptionObserver<T> = {
           closed,
-          error: error!,
           complete: complete!,
+          error: error!,
           next: next!
         }
         const wSub = subscribe(observer) as Subscription
