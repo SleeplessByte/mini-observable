@@ -1,6 +1,6 @@
 {
   "name": "unobservable",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "An incredibly lightweight version of TC39 Observable",
   "license": "MIT",
   "files": [
