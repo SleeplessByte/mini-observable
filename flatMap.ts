@@ -29,22 +29,26 @@ export default function flatMap<T, U>(
 ): ObservableT<U> {
   let observables = 0
   const subscriptions: Subscription[] = []
-  return new Observable(({ error, next, complete }) => {
-    subscriptions.push(
-      source.subscribe({
-        error,
-        next: value => {
-          observables += 1
-          subscriptions.push(
-            transform(value).subscribe({
-              error,
-              next,
-              complete: () => (observables -= 1) === 0 && complete()
-            })
-          )
-        }
-      })
-    )
-    return () => subscriptions.forEach(({ unsubscribe }) => unsubscribe())
-  })
+  return new Observable(
+    ({ error, next, complete }): (() => void) => {
+      subscriptions.push(
+        source.subscribe({
+          error,
+          next: (value): void => {
+            observables += 1
+            subscriptions.push(
+              transform(value).subscribe({
+                error,
+                next,
+                complete: (): false | void =>
+                  (observables -= 1) === 0 && complete()
+              })
+            )
+          }
+        })
+      )
+      return (): void =>
+        subscriptions.forEach(({ unsubscribe }): void => unsubscribe())
+    }
+  )
 }

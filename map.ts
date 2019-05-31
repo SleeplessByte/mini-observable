@@ -1,4 +1,4 @@
-import { Observable as ObservableT } from './index'
+import { Observable as ObservableT, Subscription } from './index'
 import Observable from './observable'
 
 type transformFn<T, U> = (value: T) => U
@@ -25,16 +25,18 @@ export default function map<T, U>(
   source: ObservableT<T>,
   transform: U | transformFn<T, U>
 ): ObservableT<U> {
-  return new Observable(({ complete, error, next }) => {
-    return source.subscribe({
-      complete,
-      error,
-      next: value =>
-        next(
-          typeof transform === 'function'
-            ? (transform as transformFn<T, U>)(value)
-            : transform
-        )
-    })
-  })
+  return new Observable(
+    ({ complete, error, next }): Subscription => {
+      return source.subscribe({
+        complete,
+        error,
+        next: (value): void =>
+          next(
+            typeof transform === 'function'
+              ? (transform as transformFn<T, U>)(value)
+              : transform
+          )
+      })
+    }
+  )
 }

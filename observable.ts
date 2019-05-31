@@ -40,7 +40,7 @@ export default class Observable<T> {
       sloppyObserver,
       error?: (errorValue: Error) => void,
       complete?: (value: T) => void
-    ) => {
+    ): Subscription => {
       let start: ObserverStart | undefined
       let next: ObserverNext<T> | undefined
       if (typeof sloppyObserver === 'function') {
@@ -53,20 +53,23 @@ export default class Observable<T> {
       }
       let cleanup: () => void
       let closed = false
-      const wrapClosed = (fn?: (v?: T) => void): (() => void) => (v?: T) =>
-        closed || (fn && fn(v))
-      const unsubscribe = wrapClosed(() => {
-        closed = true
-        cleanup && cleanup()
-      })
+      const wrapClosed = (fn?: (v?: T) => void): (() => void) => (
+        v?: T
+      ): boolean | void => closed || (fn && fn(v))
+      const unsubscribe = wrapClosed(
+        (): void => {
+          closed = true
+          cleanup && cleanup()
+        }
+      )
       const wrapUnsubscribe = (fn?: (v?: any) => void): (() => void) => (
         v?: any
-      ) => {
+      ): void => {
         unsubscribe()
         typeof fn === 'function' && fn(v)
       }
       error = wrapClosed(wrapUnsubscribe(error))
-      const wrapTry = (fn: (v: T) => void): (() => void) => (v?: T) => {
+      const wrapTry = (fn: (v: T) => void): (() => void) => (v?: T): void => {
         try {
           fn(v!)
         } catch (e) {
@@ -77,7 +80,7 @@ export default class Observable<T> {
       next = wrapClosed(wrapTry(next!))
 
       const subscription: Subscription = {
-        get closed() {
+        get closed(): boolean {
           return closed
         },
         unsubscribe
@@ -86,19 +89,21 @@ export default class Observable<T> {
       if (closed) {
         return subscription
       }
-      wrapTry(() => {
-        const observer: SubscriptionObserver<T> = {
-          closed,
-          complete: complete!,
-          error: error!,
-          next: next!
+      wrapTry(
+        (): void => {
+          const observer: SubscriptionObserver<T> = {
+            closed,
+            complete: complete!,
+            error: error!,
+            next: next!
+          }
+          const wSub = subscribe(observer) as Subscription
+          cleanup = wSub as any
+          if (wSub && typeof wSub.unsubscribe === 'function') {
+            cleanup = wSub.unsubscribe
+          }
         }
-        const wSub = subscribe(observer) as Subscription
-        cleanup = wSub as any
-        if (wSub && typeof wSub.unsubscribe === 'function') {
-          cleanup = wSub.unsubscribe
-        }
-      })()
+      )()
       return subscription
     }
   }

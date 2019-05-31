@@ -31,27 +31,29 @@ type InferT<S extends Sources<W>, W> = S extends {
 export default function combineObject<S extends Sources<T>, T>(
   sources: S
 ): ObservableT<Record<keyof typeof sources, InferT<S, T>>> {
-  return new Observable(({ error, next, complete }) => {
-    const total = Object.keys(sources).length
-    const started: Partial<Record<keyof S, true>> = {}
-    let completed = 0
-    const values: Partial<Record<keyof S, T>> = {}
-    for (const name in sources) {
-      if (sources.hasOwnProperty(name)) {
-        sources[name].subscribe({
-          error,
-          complete() {
-            completed += 1
-            completed === total && complete()
-          },
-          next(value) {
-            started[name] = true
-            values[name] = value
-            Object.keys(started).length === total &&
-              next(values as Record<keyof S, InferT<S, T>>)
-          }
-        })
+  return new Observable(
+    ({ error, next, complete }): void => {
+      const total = Object.keys(sources).length
+      const started: Partial<Record<keyof S, true>> = {}
+      let completed = 0
+      const values: Partial<Record<keyof S, T>> = {}
+      for (const name in sources) {
+        if (sources.hasOwnProperty(name)) {
+          sources[name].subscribe({
+            error,
+            complete(): void {
+              completed += 1
+              completed === total && complete()
+            },
+            next(value): void {
+              started[name] = true
+              values[name] = value
+              Object.keys(started).length === total &&
+                next(values as Record<keyof S, InferT<S, T>>)
+            }
+          })
+        }
       }
     }
-  })
+  )
 }

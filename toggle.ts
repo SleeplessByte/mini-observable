@@ -26,19 +26,21 @@ export default function toggle<T>(
   source: ObservableT<T>,
   toggler: ObservableT<boolean>
 ): ObservableT<T> {
-  return new Observable(({ complete, error, next }) => {
-    let doNext = false
-    const togglerSubscription = toggler.subscribe({
-      next: bool => (doNext = bool)
-    })
-    const sourceSubscription = source.subscribe({
-      complete,
-      error,
-      next: value => doNext && next(value)
-    })
-    return () => {
-      togglerSubscription.unsubscribe()
-      sourceSubscription.unsubscribe()
+  return new Observable(
+    ({ complete, error, next }): (() => void) => {
+      let doNext = false
+      const togglerSubscription = toggler.subscribe({
+        next: (bool): boolean => (doNext = bool)
+      })
+      const sourceSubscription = source.subscribe({
+        complete,
+        error,
+        next: (value): false | void => doNext && next(value)
+      })
+      return (): void => {
+        togglerSubscription.unsubscribe()
+        sourceSubscription.unsubscribe()
+      }
     }
-  })
+  )
 }

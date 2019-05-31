@@ -1,4 +1,4 @@
-import { Observable as ObservableT } from './index'
+import { Observable as ObservableT, Subscription } from './index'
 import Observable from './observable'
 
 /**
@@ -22,16 +22,18 @@ export default function skip<T>(
   source: ObservableT<T>,
   count: number
 ): ObservableT<T> {
-  return new Observable(({ complete, error, next }) => {
-    return source.subscribe({
-      complete,
-      error,
-      next: value => {
-        if (count === 0) {
-          return next(value)
+  return new Observable(
+    ({ complete, error, next }): Subscription => {
+      return source.subscribe({
+        complete,
+        error,
+        next: (value): void => {
+          if (count === 0) {
+            return next(value)
+          }
+          count -= 1
         }
-        count -= 1
-      }
-    })
-  })
+      })
+    }
+  )
 }

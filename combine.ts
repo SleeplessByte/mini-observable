@@ -36,36 +36,38 @@ export default function combine<T, U, V>(
   sourceB: ObservableT<U>,
   transform: (a: T, b: U) => V
 ): ObservableT<V> {
-  return new Observable(({ error, next, complete }) => {
-    let sourceAComplete = false
-    let sourceBComplete = false
-    let sourceAStarted: boolean
-    let sourceBStarted: boolean
-    let sourceAValue: T
-    let sourceBValue: U
-    sourceA.subscribe({
-      error,
-      complete() {
-        sourceAComplete = true
-        sourceBComplete && complete()
-      },
-      next(value) {
-        sourceAValue = value
-        sourceAStarted = true
-        sourceBStarted && next(transform(sourceAValue, sourceBValue))
-      }
-    })
-    sourceB.subscribe({
-      error,
-      complete() {
-        sourceBComplete = true
-        sourceAComplete && complete()
-      },
-      next(value) {
-        sourceBValue = value
-        sourceBStarted = true
-        sourceAStarted && next(transform(sourceAValue, sourceBValue))
-      }
-    })
-  })
+  return new Observable(
+    ({ error, next, complete }): void => {
+      let sourceAComplete = false
+      let sourceBComplete = false
+      let sourceAStarted: boolean
+      let sourceBStarted: boolean
+      let sourceAValue: T
+      let sourceBValue: U
+      sourceA.subscribe({
+        error,
+        complete(): void {
+          sourceAComplete = true
+          sourceBComplete && complete()
+        },
+        next(value): void {
+          sourceAValue = value
+          sourceAStarted = true
+          sourceBStarted && next(transform(sourceAValue, sourceBValue))
+        }
+      })
+      sourceB.subscribe({
+        error,
+        complete(): void {
+          sourceBComplete = true
+          sourceAComplete && complete()
+        },
+        next(value): void {
+          sourceBValue = value
+          sourceBStarted = true
+          sourceAStarted && next(transform(sourceAValue, sourceBValue))
+        }
+      })
+    }
+  )
 }

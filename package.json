@@ -1,6 +1,6 @@
 {
   "name": "unobservable",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An incredibly lightweight version of TC39 Observable",
   "license": "MIT",
   "files": [
@@ -16,7 +16,7 @@
     "prepublishOnly": "yarn check-size",
     "prepare": "yarn tsc -m es6 && renamer --find js --replace mjs --force *.js && tsc",
     "check-size": "yarn terser -cm toplevel --ecma 8 observable.mjs | gzip -c | wc -c",
-    "lint": "yarn tslint *.ts test/*.ts",
+    "lint": "yarn eslint *.ts test/*.ts",
     "pretest": "yarn tsc -p test/tsconfig.json",
     "test": "yarn mocha test/*.js",
     "format:base": "yarn prettier --arrow-parens=avoid --parser=typescript --no-semi --single-quote --trailing-comma=none",
@@ -29,14 +29,16 @@
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
     "@types/node": "^11.11.3",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
     "chai": "^4.2.0",
     "es-observable-tests": "^0.3.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
     "mocha": "^6.0.2",
     "prettier": "^1.16.4",
     "renamer": "^1.1.1",
     "terser": "^3.17.0",
-    "tslint": "^5.14.0",
-    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.3333"
   },
   "dependencies": {}

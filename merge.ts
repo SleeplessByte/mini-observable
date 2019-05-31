@@ -1,4 +1,4 @@
-import { Observable as ObservableT } from './index'
+import { Observable as ObservableT, Subscription } from './index'
 import Observable from './observable'
 
 /**
@@ -34,19 +34,22 @@ export default function merge<A, B, C, D>(
 export default function merge<T>(
   ...sources: Array<ObservableT<T>>
 ): ObservableT<T> {
-  return new Observable(({ error, next, complete }) => {
-    let remaining = sources.length
-    const subscriptions = sources.map(source =>
-      source.subscribe({
-        error,
-        next,
-        complete: () => (remaining -= 1) === 0 && complete()
-      })
-    )
-    return () => {
-      for (const { unsubscribe } of subscriptions) {
-        unsubscribe()
+  return new Observable(
+    ({ error, next, complete }): (() => void) => {
+      let remaining = sources.length
+      const subscriptions = sources.map(
+        (source): Subscription =>
+          source.subscribe({
+            error,
+            next,
+            complete: (): false | void => (remaining -= 1) === 0 && complete()
+          })
+      )
+      return (): void => {
+        for (const { unsubscribe } of subscriptions) {
+          unsubscribe()
+        }
       }
     }
-  })
+  )
 }

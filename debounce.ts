@@ -22,15 +22,17 @@ export default function debounce<T>(
   source: ObservableT<T>,
   duration: number
 ): ObservableT<T> {
-  return new Observable(({ complete, error, next }) => {
-    let timer: number
-    source.subscribe({
-      error,
-      complete: () => setTimeout(complete, duration),
-      next: value => {
-        clearTimeout(timer)
-        timer = (setTimeout(next, duration, value) as unknown) as number
-      }
-    })
-  })
+  return new Observable(
+    ({ complete, error, next }): void => {
+      let timer: number
+      source.subscribe({
+        error,
+        complete: (): NodeJS.Timeout | number => setTimeout(complete, duration),
+        next: (value): void => {
+          clearTimeout(timer)
+          timer = (setTimeout(next, duration, value) as unknown) as number
+        }
+      })
+    }
+  )
 }

@@ -1,4 +1,4 @@
-import { Observable as ObservableT } from './index'
+import { Observable as ObservableT, Subscription } from './index'
 import Observable from './observable'
 
 /**
@@ -22,11 +22,12 @@ export default function filter<T>(
   source: ObservableT<T>,
   predicate: (item: T) => boolean
 ): ObservableT<T> {
-  return new Observable(({ complete, error, next }) =>
-    source.subscribe({
-      complete,
-      error,
-      next: value => predicate(value) && next(value)
-    })
+  return new Observable(
+    ({ complete, error, next }): Subscription =>
+      source.subscribe({
+        complete,
+        error,
+        next: (value): false | void => predicate(value) && next(value)
+      })
   )
 }

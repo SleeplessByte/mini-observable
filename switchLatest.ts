@@ -31,28 +31,30 @@ export default function switchLatest<T, U>(
   transform: (item: T) => ObservableT<U>
 ): ObservableT<U> {
   let remaining = 0
-  return new Observable(({ error, next, complete }) => {
-    let oldSubscription: Subscription | null = null
-    const { unsubscribe } = source.subscribe({
-      error,
-      next: value => {
-        remaining += 1
-        if (oldSubscription) {
-          remaining -= 1
-          oldSubscription.unsubscribe()
-        }
-        oldSubscription = transform(value).subscribe({
-          error,
-          next,
-          complete: () => {
+  return new Observable(
+    ({ error, next, complete }): void => {
+      let oldSubscription: Subscription | null = null
+      const { unsubscribe } = source.subscribe({
+        error,
+        next: (value): void => {
+          remaining += 1
+          if (oldSubscription) {
             remaining -= 1
-            if (remaining === 0) {
-              complete()
-              unsubscribe && unsubscribe()
-            }
+            oldSubscription.unsubscribe()
           }
-        })
-      }
-    })
-  })
+          oldSubscription = transform(value).subscribe({
+            error,
+            next,
+            complete: (): void => {
+              remaining -= 1
+              if (remaining === 0) {
+                complete()
+                unsubscribe && unsubscribe()
+              }
+            }
+          })
+        }
+      })
+    }
+  )
 }

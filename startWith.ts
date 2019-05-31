@@ -1,4 +1,4 @@
-import { Observable as ObservableT } from './index'
+import { Observable as ObservableT, Subscription } from './index'
 import Observable from './observable'
 
 // source:          |-----1--2--3--4--5--6--|
@@ -28,8 +28,10 @@ export default function startWith<T, U>(
   source: ObservableT<U>,
   start: T
 ): ObservableT<T | U> {
-  return new Observable(({ error, next, complete }) => {
-    next(start)
-    return source.subscribe({ error, next, complete })
-  })
+  return new Observable(
+    ({ error, next, complete }): Subscription => {
+      next(start)
+      return source.subscribe({ error, next, complete })
+    }
+  )
 }

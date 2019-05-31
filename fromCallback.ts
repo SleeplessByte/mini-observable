@@ -55,6 +55,8 @@ export default function fromCallback<A, B, C, D, R>(
 export default function fromCallback<T, R>(
   func: CallableFunctionT<T, R>
 ): (...arg: T[]) => ObservableT<R> {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   return (...args) =>
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     new Observable(({ next }) => func(...args.concat(next as any)))
 }

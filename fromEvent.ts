@@ -33,8 +33,10 @@ export default function fromEvent(
   name: string,
   options?: boolean | AddEventListenerOptions
 ): ObservableT<Event | CustomEvent> {
-  return new Observable(({ next }) => {
-    element.addEventListener(name, next, options)
-    return () => element.removeEventListener(name, next, options)
-  })
+  return new Observable(
+    ({ next }): (() => void) => {
+      element.addEventListener(name, next, options)
+      return (): void => element.removeEventListener(name, next, options)
+    }
+  )
 }
